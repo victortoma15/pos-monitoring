@@ -1,1 +1,1 @@
-# POS_Monitoring
+# POS monitoring application
