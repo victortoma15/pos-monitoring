@@ -2,7 +2,6 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.15-SNAPSHOT'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-	id 'org.flywaydb.flyway' version "9.21.1"
 }
 
 group = 'io.coremaker.internship'
@@ -30,6 +29,9 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	implementation 'org.flywaydb:flyway-core:9.21.1'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 

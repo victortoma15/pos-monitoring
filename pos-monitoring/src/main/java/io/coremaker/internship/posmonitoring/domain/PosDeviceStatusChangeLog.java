@@ -3,23 +3,22 @@ package io.coremaker.internship.posmonitoring.domain;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.Instant;
 
 @Entity
-@Table (name = "pos_device_status_change_log")
+@Table
 @Data
 public class PosDeviceStatusChangeLog {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue
+    private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "id")
-    private PosDevice posDeviceId;
+//    @ManyToOne
+//    @JoinColumn(name = "id")
+//    private PosDevice posDeviceId;
 
     private Boolean online;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
-
+    private Instant createdAt;
+    private Instant updatedAt;
 
 }
