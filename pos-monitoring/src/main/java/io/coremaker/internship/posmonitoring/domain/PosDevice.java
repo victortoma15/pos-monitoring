@@ -4,6 +4,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -22,5 +24,8 @@ public class PosDevice {
     private Instant lastActivity;
     private Instant createdAt;
     private Instant updatedAt;
+
+    @OneToMany(mappedBy = "posDevice", orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<PosDeviceStatusChangeLog> statusChangeLogs = new ArrayList<>();
 
 }

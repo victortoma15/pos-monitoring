@@ -9,13 +9,14 @@ import java.time.Instant;
 @Table
 @Data
 public class PosDeviceStatusChangeLog {
+
     @Id
     @GeneratedValue
     private Long id;
 
-//    @ManyToOne
-//    @JoinColumn(name = "id")
-//    private PosDevice posDeviceId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pos_device_id")
+    private PosDevice posDevice;
 
     private Boolean online;
     private Instant createdAt;
