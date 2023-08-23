@@ -1,7 +1,7 @@
 package io.coremaker.internship.posmonitoring.controllers;
 
-public class PosNotFound extends RuntimeException{
-    public PosNotFound(Long id) {
+public class PosNotFoundException extends RuntimeException{
+    public PosNotFoundException(Long id) {
         super("Couldn't find pos " + id);
     }
 }

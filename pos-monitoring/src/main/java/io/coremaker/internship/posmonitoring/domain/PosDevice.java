@@ -15,10 +15,10 @@ import java.util.List;
 @Data
 @Getter
 @Setter
-public class PosDevice {
+public class PosDevice  extends BaseEntity{
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String deviceId;
@@ -26,8 +26,6 @@ public class PosDevice {
     private Boolean online;
     private String provider;
     private Instant lastActivity;
-    private Instant createdAt;
-    private Instant updatedAt;
 
     @OneToMany(mappedBy = "posDevice", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<PosDeviceStatusChangeLog> statusChangeLogs = new ArrayList<>();

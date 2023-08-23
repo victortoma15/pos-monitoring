@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ControllerAdvice
 public class PosNotFoundAdvice {
     @ResponseBody
-    @ExceptionHandler(PosNotFound.class)
-    String posNotFoundHandler(PosNotFound ex) {
+    @ExceptionHandler(PosNotFoundException.class)
+    String posNotFoundHandler(PosNotFoundException ex) {
         return ex.getMessage();
     }
 }
