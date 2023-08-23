@@ -4,6 +4,10 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
 
+ext{
+	flywayVersion = '9.21.1'
+}
+
 group = 'io.coremaker.internship'
 version = '0.0.1-SNAPSHOT'
 
@@ -30,7 +34,7 @@ dependencies {
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
 
-	implementation 'org.flywaydb:flyway-core:9.21.1'
+	implementation "org.flywaydb:flyway-core:${flywayVersion}"
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
