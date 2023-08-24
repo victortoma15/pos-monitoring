@@ -15,7 +15,7 @@ import java.util.List;
 @Data
 @Getter
 @Setter
-public class PosDevice  extends BaseEntity{
+public class PosDevice extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
