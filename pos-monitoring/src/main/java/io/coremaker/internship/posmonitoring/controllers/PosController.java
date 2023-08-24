@@ -1,23 +1,24 @@
 package io.coremaker.internship.posmonitoring.controllers;
 
-import io.coremaker.internship.posmonitoring.domain.PosDevice;
-import io.coremaker.internship.posmonitoring.repositories.PosRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import io.coremaker.internship.posmonitoring.controllers.dto.CreatePosDeviceRequestDto;
+import io.coremaker.internship.posmonitoring.controllers.dto.PosDeviceResponseDto;
+import io.coremaker.internship.posmonitoring.services.PosService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/devices")
 public class PosController {
 
-    private final PosRepository posRepository;
+    private final PosService posService;
 
-    @Autowired
-    public PosController(PosRepository posRepository) {
-        this.posRepository = posRepository;
-    }
-
-    @PostMapping("/pos")
-    PosDevice newPosDevice(@RequestBody PosDevice newPosDevice) {
-        return posRepository.save(newPosDevice);
+    @PostMapping
+    PosDeviceResponseDto createPosDevice(@RequestBody CreatePosDeviceRequestDto body) {
+        return posService.createPosDevice(body);
     }
 
 }

@@ -1,25 +1,44 @@
 package io.coremaker.internship.posmonitoring.services;
 
+import io.coremaker.internship.posmonitoring.controllers.dto.CreatePosDeviceRequestDto;
+import io.coremaker.internship.posmonitoring.controllers.dto.PosDeviceResponseDto;
 import io.coremaker.internship.posmonitoring.domain.PosDevice;
 import io.coremaker.internship.posmonitoring.repositories.PosRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
+@RequiredArgsConstructor
 public class PosService {
 
     private final PosRepository posRepository;
 
-    @Autowired
-    public PosService(PosRepository posRepository) {
-        this.posRepository = posRepository;
+
+    public PosDeviceResponseDto createPosDevice(CreatePosDeviceRequestDto posDevice) {
+        final PosDevice newPosDevice = mapFrom(posDevice);
+        final PosDevice createdPosDevice = posRepository.save(newPosDevice);
+        return mapFrom(createdPosDevice);
     }
 
-    public PosDevice createPosDevice(PosDevice posDevice) {
-        return posRepository.save(posDevice);
+    private PosDevice mapFrom(final CreatePosDeviceRequestDto dto) {
+        final PosDevice entity = new PosDevice();
+        entity.setDeviceId(dto.getDeviceId());
+        entity.setProvider(dto.getProvider());
+        entity.setLocation(dto.getLocation());
+        entity.setOnline(dto.getOnline());
+        entity.setLastActivity(dto.getLastActivity());
+        return entity;
+    }
+
+    private PosDeviceResponseDto mapFrom(final PosDevice entity) {
+        final PosDeviceResponseDto dto = new PosDeviceResponseDto();
+        dto.setId(entity.getId());
+        dto.setDeviceId(entity.getDeviceId());
+        dto.setLocation(entity.getLocation());
+        dto.setOnline(entity.getOnline());
+        dto.setProvider(entity.getProvider());
+        dto.setLastActivity(entity.getLastActivity());
+        return dto;
     }
 
 }
