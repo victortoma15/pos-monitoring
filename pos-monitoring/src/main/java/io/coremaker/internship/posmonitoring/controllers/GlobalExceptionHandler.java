@@ -28,7 +28,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 );
     }
 
-
     @ExceptionHandler(DeviceNotFoundException.class)
     public ResponseEntity<ErrorResponseDto> handleDeviceNotFoundException(DeviceNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
