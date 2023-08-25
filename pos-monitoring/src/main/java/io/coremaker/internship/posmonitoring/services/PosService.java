@@ -43,18 +43,10 @@ public class PosService {
         return dto;
     }
 
+
     public void deletePosDevice(Long id) {
         try {
             posRepository.deleteById(id);
-        } catch (EmptyResultDataAccessException e) {
-            throw new DeviceNotFoundException(id);
-        }
-    }
-
-    public String deletePosDeviceSuccessfully(Long id) {
-        try {
-            posRepository.deleteById(id);
-            return "Device deleted successfully!";
         } catch (EmptyResultDataAccessException e) {
             throw new DeviceNotFoundException(id);
         }

@@ -25,9 +25,9 @@ public class PosController {
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<String> deletePosDevice(@PathVariable Long id) {
-        String successMessage = posService.deletePosDeviceSuccessfully(id);
-        return ResponseEntity.ok(successMessage);
+    ResponseEntity<Void> deletePosDevice(@PathVariable Long id) {
+        posService.deletePosDevice(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

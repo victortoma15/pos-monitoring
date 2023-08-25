@@ -11,9 +11,4 @@ import java.time.Instant;
 @Builder
 public class ErrorResponseDto {
     String error;
-    Instant timestamp = Instant.now();
-
-    public ErrorResponseDto(String error) {
-        this.error = error;
-    }
 }
