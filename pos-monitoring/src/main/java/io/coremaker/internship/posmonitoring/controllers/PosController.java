@@ -9,17 +9,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/devices", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/devices", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class PosController {
 
     private final PosService posService;
 
     @PostMapping
-    PosDeviceResponseDto createPosDevice(@RequestBody CreatePosDeviceRequestDto body) {
+    PosDeviceResponseDto createPosDevice(@RequestBody @Valid CreatePosDeviceRequestDto body) {
         return posService.createPosDevice(body);
     }
 
