@@ -8,10 +8,10 @@ import java.time.Instant;
 @Entity
 @Table
 @Data
-public class PosDeviceStatusChangeLog {
+public class PosDeviceStatusChangeLog extends BaseEntity{
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -19,7 +19,5 @@ public class PosDeviceStatusChangeLog {
     private PosDevice posDevice;
 
     private Boolean online;
-    private Instant createdAt;
-    private Instant updatedAt;
 
 }
