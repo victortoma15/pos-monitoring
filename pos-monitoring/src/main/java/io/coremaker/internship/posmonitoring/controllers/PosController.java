@@ -4,20 +4,23 @@ import io.coremaker.internship.posmonitoring.controllers.dto.CreatePosDeviceRequ
 import io.coremaker.internship.posmonitoring.controllers.dto.PosDeviceResponseDto;
 import io.coremaker.internship.posmonitoring.services.PosService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
+@Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/devices")
+@RequestMapping(value = "/devices", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
 public class PosController {
 
     private final PosService posService;
 
     @PostMapping
-    PosDeviceResponseDto createPosDevice(@RequestBody CreatePosDeviceRequestDto body) {
+    PosDeviceResponseDto createPosDevice(@RequestBody @Valid CreatePosDeviceRequestDto body) {
         return posService.createPosDevice(body);
     }
 
