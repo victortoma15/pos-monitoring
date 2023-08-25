@@ -1,10 +1,12 @@
 package io.coremaker.internship.posmonitoring.services;
 
+import io.coremaker.internship.posmonitoring.controllers.DeviceNotFoundException;
 import io.coremaker.internship.posmonitoring.controllers.dto.CreatePosDeviceRequestDto;
 import io.coremaker.internship.posmonitoring.controllers.dto.PosDeviceResponseDto;
 import io.coremaker.internship.posmonitoring.domain.PosDevice;
 import io.coremaker.internship.posmonitoring.repositories.PosRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -39,6 +41,23 @@ public class PosService {
         dto.setProvider(entity.getProvider());
         dto.setLastActivity(entity.getLastActivity());
         return dto;
+    }
+
+    public void deletePosDevice(Long id) {
+        try {
+            posRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new DeviceNotFoundException(id);
+        }
+    }
+
+    public String deletePosDeviceSuccessfully(Long id) {
+        try {
+            posRepository.deleteById(id);
+            return "Device deleted successfully!";
+        } catch (EmptyResultDataAccessException e) {
+            throw new DeviceNotFoundException(id);
+        }
     }
 
 }
