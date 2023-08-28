@@ -1,6 +1,7 @@
 package io.coremaker.internship.posmonitoring.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -11,6 +12,7 @@ import java.util.List;
 @Entity
 @Table
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class PosDevice extends BaseEntity {
 
     @Id

@@ -14,7 +14,7 @@ import javax.validation.Valid;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/devices", consumes = MediaType.APPLICATION_JSON_VALUE, produces= MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/devices", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 public class PosController {
 
     private final PosService posService;
@@ -22,6 +22,12 @@ public class PosController {
     @PostMapping
     PosDeviceResponseDto createPosDevice(@RequestBody @Valid CreatePosDeviceRequestDto body) {
         return posService.createPosDevice(body);
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<Void> deletePosDevice(@PathVariable Long id) {
+        posService.deletePosDevice(id);
+        return ResponseEntity.noContent().build();
     }
 
 }

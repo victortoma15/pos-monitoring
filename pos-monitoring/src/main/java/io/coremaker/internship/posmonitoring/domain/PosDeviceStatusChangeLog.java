@@ -1,14 +1,15 @@
 package io.coremaker.internship.posmonitoring.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-import java.time.Instant;
 
 @Entity
 @Table
 @Data
-public class PosDeviceStatusChangeLog extends BaseEntity{
+@EqualsAndHashCode(callSuper = true)
+public class PosDeviceStatusChangeLog extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
