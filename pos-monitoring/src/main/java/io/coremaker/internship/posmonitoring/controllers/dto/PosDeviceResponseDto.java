@@ -20,5 +20,7 @@ public class PosDeviceResponseDto {
     private String provider;
     @NotNull
     private Instant lastActivity;
+    private Instant createdAt;
+    private Instant updatedAt;
 
 }

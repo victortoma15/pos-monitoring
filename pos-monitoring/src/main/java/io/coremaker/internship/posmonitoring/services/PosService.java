@@ -42,6 +42,8 @@ public class PosService {
         dto.setOnline(entity.getOnline());
         dto.setProvider(entity.getProvider());
         dto.setLastActivity(entity.getLastActivity());
+        dto.setCreatedAt(entity.getCreatedAt());
+        dto.setUpdatedAt(entity.getUpdatedAt());
         return dto;
     }
 
