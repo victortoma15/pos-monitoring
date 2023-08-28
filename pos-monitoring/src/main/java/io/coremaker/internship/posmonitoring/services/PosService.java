@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class PosService {
@@ -50,6 +52,15 @@ public class PosService {
         } catch (EmptyResultDataAccessException e) {
             throw new DeviceNotFoundException(id);
         }
+    }
+
+    public PosDeviceResponseDto getPosDevice(Long id) {
+        final Optional<PosDevice> optionalPosDevice = posRepository.findById(id);
+        if (optionalPosDevice.isEmpty()) {
+            throw new DeviceNotFoundException(id);
+        }
+        PosDevice posDevice = optionalPosDevice.get();
+        return mapFrom(posDevice);
     }
 
 }

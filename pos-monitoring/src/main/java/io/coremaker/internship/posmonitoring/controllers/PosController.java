@@ -30,4 +30,10 @@ public class PosController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/{id}")
+    ResponseEntity<PosDeviceResponseDto> getPosDevice(@PathVariable Long id) {
+        PosDeviceResponseDto posDevice = posService.getPosDevice(id);
+        return ResponseEntity.ok(posDevice);
+    }
+
 }
