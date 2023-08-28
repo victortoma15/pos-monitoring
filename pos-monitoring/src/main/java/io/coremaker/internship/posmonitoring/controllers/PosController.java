@@ -35,5 +35,9 @@ public class PosController {
         PosDeviceResponseDto posDevice = posService.getPosDevice(id);
         return ResponseEntity.ok(posDevice);
     }
+    @PutMapping("/{id}")
+    PosDeviceResponseDto updatePosDevice(@PathVariable Long id, @RequestBody @Valid CreatePosDeviceRequestDto body) {
+        return posService.updatePosDevice(id, body);
+    }
 
 }

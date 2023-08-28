@@ -64,5 +64,22 @@ public class PosService {
         PosDevice posDevice = optionalPosDevice.get();
         return mapFrom(posDevice);
     }
+    private void updatemapFrom(final CreatePosDeviceRequestDto dto, PosDevice entity) {
+        entity.setDeviceId(dto.getDeviceId());
+        entity.setProvider(dto.getProvider());
+        entity.setLocation(dto.getLocation());
+        entity.setOnline(dto.getOnline());
+        entity.setLastActivity(dto.getLastActivity());
+    }
+    public PosDeviceResponseDto updatePosDevice(Long id, CreatePosDeviceRequestDto updatedPosDevice) {
+        Optional<PosDevice> optionalPosDevice = posRepository.findById(id);
+        if (optionalPosDevice.isEmpty()) {
+            throw new DeviceNotFoundException(id);
+        }
+        PosDevice existingPosDevice = optionalPosDevice.get();
+        updatemapFrom(updatedPosDevice, existingPosDevice);
+        final PosDevice updatedDevice = posRepository.save(existingPosDevice);
+        return mapFrom(updatedDevice);
+    }
 
 }
