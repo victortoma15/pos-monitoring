@@ -24,7 +24,12 @@ public class PosDevice extends BaseEntity {
     private String provider;
     private Instant lastActivity;
 
-    @OneToMany(mappedBy = "posDevice", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "posDevice", orphanRemoval = true, fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
     private List<PosDeviceStatusChangeLog> statusChangeLogs = new ArrayList<>();
+
+    public void recordStatusChangeLog(final PosDeviceStatusChangeLog statusChangeLog) {
+        statusChangeLogs.add(statusChangeLog);
+        statusChangeLog.setPosDevice(this);
+    }
 
 }

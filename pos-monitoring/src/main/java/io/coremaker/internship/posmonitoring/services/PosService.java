@@ -3,11 +3,14 @@ package io.coremaker.internship.posmonitoring.services;
 import io.coremaker.internship.posmonitoring.controllers.DeviceNotFoundException;
 import io.coremaker.internship.posmonitoring.controllers.dto.CreatePosDeviceRequestDto;
 import io.coremaker.internship.posmonitoring.controllers.dto.PosDeviceResponseDto;
+import io.coremaker.internship.posmonitoring.controllers.dto.UpdatePosDeviceRequestDto;
 import io.coremaker.internship.posmonitoring.domain.PosDevice;
+import io.coremaker.internship.posmonitoring.domain.PosDeviceStatusChangeLog;
 import io.coremaker.internship.posmonitoring.repositories.PosRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -65,4 +68,26 @@ public class PosService {
         return mapFrom(posDevice);
     }
 
+    private void map(final UpdatePosDeviceRequestDto dto, PosDevice entity) {
+        entity.setOnline(dto.getOnline());
+        entity.setLastActivity(dto.getLastActivity());
+    }
+
+    @Transactional
+    public PosDeviceResponseDto updatePosDevice(Long id, UpdatePosDeviceRequestDto updatedPosDevice) {
+        Optional<PosDevice> optionalPosDevice = posRepository.findById(id);
+        if (optionalPosDevice.isEmpty()) {
+            throw new DeviceNotFoundException(id);
+        }
+        PosDevice existingPosDevice = optionalPosDevice.get();
+        map(updatedPosDevice, existingPosDevice);
+
+        final PosDeviceStatusChangeLog statusChangeLog = new PosDeviceStatusChangeLog();
+        statusChangeLog.setOnline(existingPosDevice.getOnline());
+
+        existingPosDevice.recordStatusChangeLog(statusChangeLog);
+
+        final PosDevice updatedDevice = posRepository.save(existingPosDevice);
+        return mapFrom(updatedDevice);
+    }
 }
