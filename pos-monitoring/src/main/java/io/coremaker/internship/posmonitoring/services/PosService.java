@@ -3,9 +3,11 @@ package io.coremaker.internship.posmonitoring.services;
 import io.coremaker.internship.posmonitoring.controllers.DeviceNotFoundException;
 import io.coremaker.internship.posmonitoring.controllers.dto.CreatePosDeviceRequestDto;
 import io.coremaker.internship.posmonitoring.controllers.dto.PosDeviceResponseDto;
+import io.coremaker.internship.posmonitoring.controllers.dto.UpdatePosDeviceRequestDto;
 import io.coremaker.internship.posmonitoring.domain.PosDevice;
 import io.coremaker.internship.posmonitoring.repositories.PosRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.sql.Update;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +15,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class PosService {
+public class PosService{
 
     private final PosRepository posRepository;
 
@@ -64,22 +66,18 @@ public class PosService {
         PosDevice posDevice = optionalPosDevice.get();
         return mapFrom(posDevice);
     }
-    private void updatemapFrom(final CreatePosDeviceRequestDto dto, PosDevice entity) {
-        entity.setDeviceId(dto.getDeviceId());
-        entity.setProvider(dto.getProvider());
-        entity.setLocation(dto.getLocation());
+    private void map(final UpdatePosDeviceRequestDto dto, PosDevice entity) {
         entity.setOnline(dto.getOnline());
         entity.setLastActivity(dto.getLastActivity());
     }
-    public PosDeviceResponseDto updatePosDevice(Long id, CreatePosDeviceRequestDto updatedPosDevice) {
+    public PosDeviceResponseDto updatePosDevice(Long id, UpdatePosDeviceRequestDto updatedPosDevice) {
         Optional<PosDevice> optionalPosDevice = posRepository.findById(id);
         if (optionalPosDevice.isEmpty()) {
             throw new DeviceNotFoundException(id);
         }
         PosDevice existingPosDevice = optionalPosDevice.get();
-        updatemapFrom(updatedPosDevice, existingPosDevice);
+        map(updatedPosDevice, existingPosDevice);
         final PosDevice updatedDevice = posRepository.save(existingPosDevice);
         return mapFrom(updatedDevice);
     }
-
 }

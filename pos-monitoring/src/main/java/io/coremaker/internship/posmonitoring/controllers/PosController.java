@@ -2,6 +2,7 @@ package io.coremaker.internship.posmonitoring.controllers;
 
 import io.coremaker.internship.posmonitoring.controllers.dto.CreatePosDeviceRequestDto;
 import io.coremaker.internship.posmonitoring.controllers.dto.PosDeviceResponseDto;
+import io.coremaker.internship.posmonitoring.controllers.dto.UpdatePosDeviceRequestDto;
 import io.coremaker.internship.posmonitoring.services.PosService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -36,7 +37,7 @@ public class PosController {
         return ResponseEntity.ok(posDevice);
     }
     @PutMapping("/{id}")
-    PosDeviceResponseDto updatePosDevice(@PathVariable Long id, @RequestBody @Valid CreatePosDeviceRequestDto body) {
+    PosDeviceResponseDto updatePosDevice(@PathVariable Long id, @RequestBody @Valid UpdatePosDeviceRequestDto body) {
         return posService.updatePosDevice(id, body);
     }
 
