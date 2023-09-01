@@ -11,6 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Validated
 @RestController
@@ -36,9 +37,30 @@ public class PosController {
         PosDeviceResponseDto posDevice = posService.getPosDevice(id);
         return ResponseEntity.ok(posDevice);
     }
+
     @PutMapping("/{id}")
     PosDeviceResponseDto updatePosDevice(@PathVariable Long id, @RequestBody @Valid UpdatePosDeviceRequestDto body) {
         return posService.updatePosDevice(id, body);
+    }
+
+    //GetMapping for combined provider and status search
+    //Modify getALLPosDevices to paginate and order by
+    @GetMapping
+    List<PosDeviceResponseDto> getDevices(@RequestParam(required = false) Boolean online, @RequestParam(required = false) String provider,
+                                          @RequestParam(required = false, defaultValue = "0") int pageNo,
+                                          @RequestParam(required = false, defaultValue = "30") int size) {
+
+        List<PosDeviceResponseDto> devices;
+
+        if (online != null) {
+            devices = posService.getPosDevicesByStatus(online, pageNo, size);
+        } else if (provider != null) {
+            devices = posService.getPosDevicesByProvider(provider, pageNo, size);
+        } else {
+            devices = posService.getAllPosDevices();
+        }
+
+        return devices;
     }
 
 }
