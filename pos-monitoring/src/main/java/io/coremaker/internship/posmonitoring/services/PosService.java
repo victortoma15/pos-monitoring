@@ -9,9 +9,15 @@ import io.coremaker.internship.posmonitoring.domain.PosDeviceStatusChangeLog;
 import io.coremaker.internship.posmonitoring.repositories.PosRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -90,4 +96,40 @@ public class PosService {
         final PosDevice updatedDevice = posRepository.save(existingPosDevice);
         return mapFrom(updatedDevice);
     }
+
+    private Pageable createPageable(int pageNo, int size, Sort.Direction sortDirection) {
+        return PageRequest.of(pageNo, size, Sort.by(sortDirection, "createdAt"));
+    }
+
+    private List<PosDeviceResponseDto> buildResponse(Page<PosDevice> pageOfPosDevices) {
+        List<PosDeviceResponseDto> responseDtos = new ArrayList<>();
+
+        for (PosDevice device : pageOfPosDevices.getContent()) {
+            responseDtos.add(mapFrom(device));
+        }
+        return responseDtos;
+    }
+
+
+    public List<PosDeviceResponseDto> getAllPosDevices(int pageNo, int size) {
+        Page<PosDevice> devices = posRepository.findAll(createPageable(pageNo, size, Sort.Direction.DESC));
+        return buildResponse(devices);
+
+    }
+
+    public List<PosDeviceResponseDto> getPosDevicesByStatus(Boolean online, int pageNo, int size) {
+        Page<PosDevice> devices = posRepository.findByOnline(online, createPageable(pageNo, size, Sort.Direction.DESC));
+        return buildResponse(devices);
+    }
+
+    public List<PosDeviceResponseDto> getPosDevicesByProvider(String provider, int pageNo, int size) {
+        Page<PosDevice> devices = posRepository.findByProvider(provider, createPageable(pageNo, size, Sort.Direction.DESC));
+        return buildResponse(devices);
+    }
+
+    public List<PosDeviceResponseDto> getPosDevicesByStatusAndProvider(Boolean online, String provider, int pageNo, int size) {
+        Page<PosDevice> devices = posRepository.findByOnlineAndProvider(online, provider, createPageable(pageNo, size, Sort.Direction.DESC));
+        return buildResponse(devices);
+    }
+
 }
