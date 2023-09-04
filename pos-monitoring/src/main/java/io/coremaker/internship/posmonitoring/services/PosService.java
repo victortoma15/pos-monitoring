@@ -97,37 +97,39 @@ public class PosService {
         return mapFrom(updatedDevice);
     }
 
-    public List<PosDeviceResponseDto> getAllPosDevices() {
-        List<PosDevice> devices = posRepository.findAll(Sort.by(Sort.Direction.DESC, "createdAt"));
+    private Pageable createPageable(int pageNo, int size, Sort.Direction sortDirection) {
+        return PageRequest.of(pageNo, size, Sort.by(sortDirection, "createdAt"));
+    }
+
+    private List<PosDeviceResponseDto> buildResponse(Page<PosDevice> pageOfPosDevices) {
         List<PosDeviceResponseDto> responseDtos = new ArrayList<>();
 
-        for (PosDevice device : devices) {
+        for (PosDevice device : pageOfPosDevices.getContent()) {
             responseDtos.add(mapFrom(device));
         }
         return responseDtos;
+    }
+
+
+    public List<PosDeviceResponseDto> getAllPosDevices(int pageNo, int size) {
+        Page<PosDevice> devices = posRepository.findAll(createPageable(pageNo, size, Sort.Direction.DESC));
+        return buildResponse(devices);
+
     }
 
     public List<PosDeviceResponseDto> getPosDevicesByStatus(Boolean online, int pageNo, int size) {
-        Pageable pageable = PageRequest.of(pageNo, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        Page<PosDevice> devices = posRepository.findByOnline(online, pageable);
-        List<PosDeviceResponseDto> responseDtos = new ArrayList<>();
-
-        for (PosDevice device : devices.getContent()) {
-            responseDtos.add(mapFrom(device));
-        }
-        return responseDtos;
+        Page<PosDevice> devices = posRepository.findByOnline(online, createPageable(pageNo, size, Sort.Direction.DESC));
+        return buildResponse(devices);
     }
 
     public List<PosDeviceResponseDto> getPosDevicesByProvider(String provider, int pageNo, int size) {
-        Pageable pageable = PageRequest.of(pageNo, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-        Page<PosDevice> devices = posRepository.findByProvider(provider, pageable);
-        List<PosDeviceResponseDto> responseDtos = new ArrayList<>();
-
-        for (PosDevice device : devices.getContent()) {
-            responseDtos.add(mapFrom(device));
-        }
-        return responseDtos;
+        Page<PosDevice> devices = posRepository.findByProvider(provider, createPageable(pageNo, size, Sort.Direction.DESC));
+        return buildResponse(devices);
     }
 
+    public List<PosDeviceResponseDto> getPosDevicesByStatusAndProvider(Boolean online, String provider, int pageNo, int size) {
+        Page<PosDevice> devices = posRepository.findByOnlineAndProvider(online, provider, createPageable(pageNo, size, Sort.Direction.DESC));
+        return buildResponse(devices);
+    }
 
 }

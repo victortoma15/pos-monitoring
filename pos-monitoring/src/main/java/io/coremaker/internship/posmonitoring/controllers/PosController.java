@@ -43,21 +43,20 @@ public class PosController {
         return posService.updatePosDevice(id, body);
     }
 
-    //GetMapping for combined provider and status search
-    //Modify getALLPosDevices to paginate and order by
     @GetMapping
     List<PosDeviceResponseDto> getDevices(@RequestParam(required = false) Boolean online, @RequestParam(required = false) String provider,
                                           @RequestParam(required = false, defaultValue = "0") int pageNo,
                                           @RequestParam(required = false, defaultValue = "30") int size) {
 
         List<PosDeviceResponseDto> devices;
-
-        if (online != null) {
+        if (online != null && provider != null) {
+            devices = posService.getPosDevicesByStatusAndProvider(online, provider, pageNo, size);
+        } else if (online != null) {
             devices = posService.getPosDevicesByStatus(online, pageNo, size);
         } else if (provider != null) {
             devices = posService.getPosDevicesByProvider(provider, pageNo, size);
         } else {
-            devices = posService.getAllPosDevices();
+            devices = posService.getAllPosDevices(pageNo, size);
         }
 
         return devices;
