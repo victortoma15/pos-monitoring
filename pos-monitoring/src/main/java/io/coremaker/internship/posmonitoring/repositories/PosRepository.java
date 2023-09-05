@@ -13,4 +13,5 @@ public interface PosRepository extends JpaRepository<PosDevice, Long> {
     Page<PosDevice> findByProvider(String provider, Pageable pageable);
 
     Page<PosDevice> findByOnlineAndProvider(Boolean online, String provider, Pageable pageable);
+
 }

@@ -3,10 +3,12 @@ package io.coremaker.internship.posmonitoring.services;
 import io.coremaker.internship.posmonitoring.controllers.DeviceNotFoundException;
 import io.coremaker.internship.posmonitoring.controllers.dto.CreatePosDeviceRequestDto;
 import io.coremaker.internship.posmonitoring.controllers.dto.PosDeviceResponseDto;
+import io.coremaker.internship.posmonitoring.controllers.dto.PosDeviceStatusChangeLogDto;
 import io.coremaker.internship.posmonitoring.controllers.dto.UpdatePosDeviceRequestDto;
 import io.coremaker.internship.posmonitoring.domain.PosDevice;
 import io.coremaker.internship.posmonitoring.domain.PosDeviceStatusChangeLog;
 import io.coremaker.internship.posmonitoring.repositories.PosRepository;
+import io.coremaker.internship.posmonitoring.repositories.StatusChangeLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -25,6 +27,7 @@ import java.util.Optional;
 public class PosService {
 
     private final PosRepository posRepository;
+    private final StatusChangeLogRepository statusChangeLogRepository;
 
 
     public PosDeviceResponseDto createPosDevice(CreatePosDeviceRequestDto posDevice) {
@@ -110,6 +113,15 @@ public class PosService {
         return responseDtos;
     }
 
+    private List<PosDeviceStatusChangeLogDto> buildStatusChangeLogResponse(Page<PosDeviceStatusChangeLog> pageOfPosDevicesStatusLog) {
+        List<PosDeviceStatusChangeLogDto> responseDtos = new ArrayList<>();
+
+        for (PosDeviceStatusChangeLog deviceStatusLog : pageOfPosDevicesStatusLog.getContent()) {
+            responseDtos.add(mapFromStatusChangeLog(deviceStatusLog));
+        }
+
+        return responseDtos;
+    }
 
     public List<PosDeviceResponseDto> getAllPosDevices(int pageNo, int size) {
         Page<PosDevice> devices = posRepository.findAll(createPageable(pageNo, size, Sort.Direction.DESC));
@@ -131,5 +143,19 @@ public class PosService {
         Page<PosDevice> devices = posRepository.findByOnlineAndProvider(online, provider, createPageable(pageNo, size, Sort.Direction.DESC));
         return buildResponse(devices);
     }
+
+    private PosDeviceStatusChangeLogDto mapFromStatusChangeLog(PosDeviceStatusChangeLog log) {
+        PosDeviceStatusChangeLogDto logDto = new PosDeviceStatusChangeLogDto();
+        logDto.setDeviceId(log.getPosDevice().getId());
+        logDto.setOnline(log.getOnline());
+        logDto.setCreatedAt(log.getCreatedAt());
+        return logDto;
+    }
+
+    public List<PosDeviceStatusChangeLogDto> getStatusChangeLogsForDevice(Long deviceId, int pageNo, int size) {
+        Page<PosDeviceStatusChangeLog> devices = statusChangeLogRepository.findByPosDevice_Id(deviceId, createPageable(pageNo, size, Sort.Direction.DESC));
+        return buildStatusChangeLogResponse(devices);
+    }
+
 
 }
