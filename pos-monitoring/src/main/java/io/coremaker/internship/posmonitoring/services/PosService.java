@@ -8,7 +8,7 @@ import io.coremaker.internship.posmonitoring.controllers.dto.UpdatePosDeviceRequ
 import io.coremaker.internship.posmonitoring.domain.PosDevice;
 import io.coremaker.internship.posmonitoring.domain.PosDeviceStatusChangeLog;
 import io.coremaker.internship.posmonitoring.repositories.PosRepository;
-import io.coremaker.internship.posmonitoring.repositories.StatusChangeLogRepository;
+import io.coremaker.internship.posmonitoring.repositories.PosDeviceStatusChangeLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -27,7 +27,7 @@ import java.util.Optional;
 public class PosService {
 
     private final PosRepository posRepository;
-    private final StatusChangeLogRepository statusChangeLogRepository;
+    private final PosDeviceStatusChangeLogRepository posDeviceStatusChangeLogRepository;
 
 
     public PosDeviceResponseDto createPosDevice(CreatePosDeviceRequestDto posDevice) {
@@ -153,7 +153,7 @@ public class PosService {
     }
 
     public List<PosDeviceStatusChangeLogDto> getStatusChangeLogsForDevice(Long deviceId, int pageNo, int size) {
-        Page<PosDeviceStatusChangeLog> devices = statusChangeLogRepository.findByPosDevice_Id(deviceId, createPageable(pageNo, size, Sort.Direction.DESC));
+        Page<PosDeviceStatusChangeLog> devices = posDeviceStatusChangeLogRepository.findByPosDevice_Id(deviceId, createPageable(pageNo, size, Sort.Direction.DESC));
         return buildStatusChangeLogResponse(devices);
     }
 
