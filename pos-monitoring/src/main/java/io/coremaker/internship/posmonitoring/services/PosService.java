@@ -5,8 +5,8 @@ import io.coremaker.internship.posmonitoring.controllers.dto.CreatePosDeviceRequ
 import io.coremaker.internship.posmonitoring.controllers.dto.PosDeviceResponseDto;
 import io.coremaker.internship.posmonitoring.controllers.dto.PosDeviceStatusChangeLogDto;
 import io.coremaker.internship.posmonitoring.controllers.dto.UpdatePosDeviceRequestDto;
-import io.coremaker.internship.posmonitoring.domain.PosDevice;
-import io.coremaker.internship.posmonitoring.domain.PosDeviceStatusChangeLog;
+import io.coremaker.internship.posmonitoring.domain.model.PosDevice;
+import io.coremaker.internship.posmonitoring.domain.model.PosDeviceStatusChangeLog;
 import io.coremaker.internship.posmonitoring.repositories.PosDeviceRepository;
 import io.coremaker.internship.posmonitoring.repositories.PosDeviceStatusChangeLogRepository;
 import lombok.RequiredArgsConstructor;
