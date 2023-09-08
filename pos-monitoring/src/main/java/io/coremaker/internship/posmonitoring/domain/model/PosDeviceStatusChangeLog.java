@@ -1,16 +1,16 @@
 package io.coremaker.internship.posmonitoring.domain.model;
 
-import io.coremaker.internship.posmonitoring.domain.model.BaseEntity;
-import io.coremaker.internship.posmonitoring.domain.model.PosDevice;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+
+import java.time.Instant;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class PosDeviceStatusChangeLog extends BaseEntity {
+public class PosDeviceStatusChangeLog {
 
     private PosDevice posDevice;
 
     private Boolean online;
+    private Instant createdAt;
+    private Instant updatedAt;
 
 }

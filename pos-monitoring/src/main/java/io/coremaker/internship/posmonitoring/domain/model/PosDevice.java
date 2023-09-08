@@ -5,7 +5,6 @@ import io.coremaker.internship.posmonitoring.domain.model.command.CreatePosDevic
 import io.coremaker.internship.posmonitoring.domain.model.command.UpdatePosDeviceCommand;
 import io.coremaker.internship.posmonitoring.domain.port.PosDeviceRepositoryPort;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -14,8 +13,7 @@ import java.util.Optional;
 
 
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class PosDevice extends BaseEntity {
+public class PosDevice {
 
 
     private Long id;
@@ -24,6 +22,8 @@ public class PosDevice extends BaseEntity {
     private Boolean online;
     private String provider;
     private Instant lastActivity;
+    private Instant createdAt;
+    private Instant updatedAt;
 
     private List<PosDeviceStatusChangeLog> statusChangeLogs = new ArrayList<>();
 
