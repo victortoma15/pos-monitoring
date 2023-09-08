@@ -6,7 +6,6 @@ import io.coremaker.internship.posmonitoring.domain.model.command.UpdatePosDevic
 
 public interface PosDeviceServicePort {
     PosDevice create(CreatePosDeviceCommand command);
-
     PosDevice update(UpdatePosDeviceCommand command);
     void delete(Long id);
     PosDevice getById(Long id);
