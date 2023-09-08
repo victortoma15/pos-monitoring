@@ -1,6 +1,6 @@
 package io.coremaker.internship.posmonitoring.repositories;
 
-import io.coremaker.internship.posmonitoring.domain.PosDevice;
+import io.coremaker.internship.posmonitoring.domain.model.PosDevice;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
