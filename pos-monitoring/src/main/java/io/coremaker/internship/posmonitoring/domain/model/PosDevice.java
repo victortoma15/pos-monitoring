@@ -31,6 +31,7 @@ public class PosDevice {
     private Instant createdAt;
     private Instant updatedAt;
 
+    @Builder.Default
     private List<PosDeviceStatusChangeLog> statusChangeLogs = new ArrayList<>();
 
     private void recordStatusChangeLog(final PosDeviceStatusChangeLog statusChangeLog) {
