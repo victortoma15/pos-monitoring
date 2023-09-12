@@ -1,14 +1,14 @@
 package io.coremaker.internship.posmonitoring.services;
 
-import io.coremaker.internship.posmonitoring.controllers.DeviceNotFoundException;
-import io.coremaker.internship.posmonitoring.controllers.dto.CreatePosDeviceRequestDto;
-import io.coremaker.internship.posmonitoring.controllers.dto.PosDeviceResponseDto;
-import io.coremaker.internship.posmonitoring.controllers.dto.PosDeviceStatusChangeLogDto;
-import io.coremaker.internship.posmonitoring.controllers.dto.UpdatePosDeviceRequestDto;
+import io.coremaker.internship.posmonitoring.domain.exception.PosDeviceNotFoundException;
+import io.coremaker.internship.posmonitoring.application.rest.posdevice.dto.CreatePosDeviceRequestDto;
+import io.coremaker.internship.posmonitoring.application.rest.posdevice.dto.PosDeviceResponseDto;
+import io.coremaker.internship.posmonitoring.application.rest.posdevice.dto.PosDeviceStatusChangeLogDto;
+import io.coremaker.internship.posmonitoring.application.rest.posdevice.dto.UpdatePosDeviceRequestDto;
 import io.coremaker.internship.posmonitoring.domain.model.PosDevice;
 import io.coremaker.internship.posmonitoring.domain.model.PosDeviceStatusChangeLog;
-import io.coremaker.internship.posmonitoring.repositories.PosDeviceRepository;
-import io.coremaker.internship.posmonitoring.repositories.PosDeviceStatusChangeLogRepository;
+import io.coremaker.internship.posmonitoring.infrastructure.PosDeviceRepository;
+import io.coremaker.internship.posmonitoring.infrastructure.PosDeviceStatusChangeLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
@@ -30,11 +30,11 @@ public class PosService {
     private final PosDeviceStatusChangeLogRepository posDeviceStatusChangeLogRepository;
 
 
-    public PosDeviceResponseDto createPosDevice(CreatePosDeviceRequestDto posDevice) {
-        final PosDevice newPosDevice = mapFrom(posDevice);
-        final PosDevice createdPosDevice = posDeviceRepository.save(newPosDevice);
-        return mapFrom(createdPosDevice);
-    }
+//    public PosDeviceResponseDto createPosDevice(CreatePosDeviceRequestDto posDevice) {
+//        final PosDevice newPosDevice = mapFrom(posDevice);
+//        final PosDevice createdPosDevice = posDeviceRepository.save(newPosDevice);
+//        return mapFrom(createdPosDevice);
+  //  }
 
     private PosDevice mapFrom(final CreatePosDeviceRequestDto dto) {
         final PosDevice entity = new PosDevice();
@@ -64,41 +64,41 @@ public class PosService {
         try {
             posDeviceRepository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
-            throw new DeviceNotFoundException(id);
+            throw new PosDeviceNotFoundException(id);
         }
     }
 
-    public PosDeviceResponseDto getPosDevice(Long id) {
-        final Optional<PosDevice> optionalPosDevice = posDeviceRepository.findById(id);
-        if (optionalPosDevice.isEmpty()) {
-            throw new DeviceNotFoundException(id);
-        }
-        PosDevice posDevice = optionalPosDevice.get();
-        return mapFrom(posDevice);
-    }
+//    public PosDeviceResponseDto getPosDevice(Long id) {
+//          final Optional<PosDevice> optionalPosDevice = posDeviceRepository.findById(id);
+//        if (optionalPosDevice.isEmpty()) {
+//            throw new PosDeviceNotFoundException(id);
+//        }
+//        PosDevice posDevice = optionalPosDevice.get();
+//        return mapFrom(posDevice);
+//    }
 
     private void map(final UpdatePosDeviceRequestDto dto, PosDevice entity) {
         entity.setOnline(dto.getOnline());
         entity.setLastActivity(dto.getLastActivity());
     }
 
-    @Transactional
-    public PosDeviceResponseDto updatePosDevice(Long id, UpdatePosDeviceRequestDto updatedPosDevice) {
-        Optional<PosDevice> optionalPosDevice = posDeviceRepository.findById(id);
-        if (optionalPosDevice.isEmpty()) {
-            throw new DeviceNotFoundException(id);
-        }
-        PosDevice existingPosDevice = optionalPosDevice.get();
-        map(updatedPosDevice, existingPosDevice);
-
-        final PosDeviceStatusChangeLog statusChangeLog = new PosDeviceStatusChangeLog();
-        statusChangeLog.setOnline(existingPosDevice.getOnline());
-
-        existingPosDevice.recordStatusChangeLog(statusChangeLog);
-
-        final PosDevice updatedDevice = posDeviceRepository.save(existingPosDevice);
-        return mapFrom(updatedDevice);
-    }
+//    @Transactional
+//    public PosDeviceResponseDto updatePosDevice(Long id, UpdatePosDeviceRequestDto updatedPosDevice) {
+//        Optional<PosDevice> optionalPosDevice = posDeviceRepository.findById(id);
+//        if (optionalPosDevice.isEmpty()) {
+//            throw new PosDeviceNotFoundException(id);
+//        }
+//        PosDevice existingPosDevice = optionalPosDevice.get();
+//        map(updatedPosDevice, existingPosDevice);
+//
+//        final PosDeviceStatusChangeLog statusChangeLog = new PosDeviceStatusChangeLog();
+//        statusChangeLog.setOnline(existingPosDevice.getOnline());
+//
+//        existingPosDevice.recordStatusChangeLog(statusChangeLog);
+//
+//        final PosDevice updatedDevice = posDeviceRepository.save(existingPosDevice);
+//        return mapFrom(updatedDevice);
+//    }
 
     private Pageable createPageable(int pageNo, int size, Sort.Direction sortDirection) {
         return PageRequest.of(pageNo, size, Sort.by(sortDirection, "createdAt"));
@@ -123,26 +123,26 @@ public class PosService {
         return responseDtos;
     }
 
-    public List<PosDeviceResponseDto> getAllPosDevices(int pageNo, int size) {
-        Page<PosDevice> devices = posDeviceRepository.findAll(createPageable(pageNo, size, Sort.Direction.DESC));
-        return buildResponse(devices);
-
-    }
-
-    public List<PosDeviceResponseDto> getPosDevicesByStatus(Boolean online, int pageNo, int size) {
-        Page<PosDevice> devices = posDeviceRepository.findByOnline(online, createPageable(pageNo, size, Sort.Direction.DESC));
-        return buildResponse(devices);
-    }
-
-    public List<PosDeviceResponseDto> getPosDevicesByProvider(String provider, int pageNo, int size) {
-        Page<PosDevice> devices = posDeviceRepository.findByProvider(provider, createPageable(pageNo, size, Sort.Direction.DESC));
-        return buildResponse(devices);
-    }
-
-    public List<PosDeviceResponseDto> getPosDevicesByStatusAndProvider(Boolean online, String provider, int pageNo, int size) {
-        Page<PosDevice> devices = posDeviceRepository.findByOnlineAndProvider(online, provider, createPageable(pageNo, size, Sort.Direction.DESC));
-        return buildResponse(devices);
-    }
+//    public List<PosDeviceResponseDto> getAllPosDevices(int pageNo, int size) {
+//        Page<PosDevice> devices = posDeviceRepository.findAll(createPageable(pageNo, size, Sort.Direction.DESC));
+//        return buildResponse(devices);
+//
+//    }
+//
+//    public List<PosDeviceResponseDto> getPosDevicesByStatus(Boolean online, int pageNo, int size) {
+//        Page<PosDevice> devices = posDeviceRepository.findByOnline(online, createPageable(pageNo, size, Sort.Direction.DESC));
+//        return buildResponse(devices);
+//    }
+//
+//    public List<PosDeviceResponseDto> getPosDevicesByProvider(String provider, int pageNo, int size) {
+//        Page<PosDevice> devices = posDeviceRepository.findByProvider(provider, createPageable(pageNo, size, Sort.Direction.DESC));
+//        return buildResponse(devices);
+//    }
+//
+//    public List<PosDeviceResponseDto> getPosDevicesByStatusAndProvider(Boolean online, String provider, int pageNo, int size) {
+//        Page<PosDevice> devices = posDeviceRepository.findByOnlineAndProvider(online, provider, createPageable(pageNo, size, Sort.Direction.DESC));
+//        return buildResponse(devices);
+//    }
 
     private PosDeviceStatusChangeLogDto mapFromStatusChangeLog(PosDeviceStatusChangeLog log) {
         PosDeviceStatusChangeLogDto logDto = new PosDeviceStatusChangeLogDto();
