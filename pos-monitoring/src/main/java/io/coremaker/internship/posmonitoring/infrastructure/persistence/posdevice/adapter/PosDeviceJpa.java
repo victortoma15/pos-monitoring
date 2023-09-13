@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "pos_device")
@@ -26,6 +28,10 @@ public class PosDeviceJpa {
     private Instant createdAt;
     private Instant updatedAt;
 
+    @OneToMany(mappedBy = "posDevice", orphanRemoval = true, fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.REMOVE})
+    private List<PosDeviceStatusChangeLogJpa> statusChangeLogs = new ArrayList<>();
+
+
     @PrePersist
     public void prePersist() {
         createdAt = updatedAt = Instant.now();
@@ -35,4 +41,5 @@ public class PosDeviceJpa {
     public void preUpdate() {
         updatedAt = Instant.now();
     }
+
 }

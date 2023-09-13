@@ -1,10 +1,10 @@
 package io.coremaker.internship.posmonitoring.infrastructure.persistence.posdevice.adapter;
 
 import io.coremaker.internship.posmonitoring.domain.model.PosDevice;
+import io.coremaker.internship.posmonitoring.domain.model.PosDeviceStatusChangeLog;
 import io.coremaker.internship.posmonitoring.domain.port.PosDeviceRepositoryPort;
 import io.coremaker.internship.posmonitoring.infrastructure.PosDeviceRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -58,6 +58,12 @@ public class PosDeviceRepositoryPortAdapter implements PosDeviceRepositoryPort {
         posDeviceJpa.setLastActivity(posDevice.getLastActivity());
         posDeviceJpa.setCreatedAt(posDevice.getCreatedAt());
         posDeviceJpa.setUpdatedAt(posDevice.getUpdatedAt());
+        for (PosDeviceStatusChangeLog statusChangeLog : posDevice.getStatusChangeLogs()) {
+            PosDeviceStatusChangeLogJpa statusChangeLogJpa = new PosDeviceStatusChangeLogJpa();
+            statusChangeLogJpa.setPosDevice(posDeviceJpa);
+            statusChangeLogJpa.setOnline(statusChangeLog.getOnline());
+            posDeviceJpa.getStatusChangeLogs().add(statusChangeLogJpa);
+        }
         PosDeviceJpa updatedPosDeviceJpa = posDeviceRepository.save(posDeviceJpa);
         PosDevice updatedPosDevice = new PosDevice();
         updatedPosDevice.setId(updatedPosDeviceJpa.getId());
@@ -68,6 +74,7 @@ public class PosDeviceRepositoryPortAdapter implements PosDeviceRepositoryPort {
         updatedPosDevice.setLastActivity(updatedPosDeviceJpa.getLastActivity());
         updatedPosDevice.setCreatedAt(updatedPosDeviceJpa.getCreatedAt());
         updatedPosDevice.setUpdatedAt(updatedPosDeviceJpa.getUpdatedAt());
+
         return updatedPosDevice;
     }
 

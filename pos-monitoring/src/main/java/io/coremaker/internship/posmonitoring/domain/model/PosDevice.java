@@ -34,12 +34,12 @@ public class PosDevice {
     @Builder.Default
     private List<PosDeviceStatusChangeLog> statusChangeLogs = new ArrayList<>();
 
-    private void recordStatusChangeLog(final PosDeviceStatusChangeLog statusChangeLog) {
+    public void recordStatusChangeLog(final PosDeviceStatusChangeLog statusChangeLog) {
         statusChangeLogs.add(statusChangeLog);
         statusChangeLog.setPosDevice(this);
     }
 
-     public static PosDevice create(CreatePosDeviceCommand command, PosDeviceRepositoryPort posDeviceRepositoryPort) {
+    public static PosDevice create(CreatePosDeviceCommand command, PosDeviceRepositoryPort posDeviceRepositoryPort) {
         if (posDeviceRepositoryPort.existsByDeviceIdAndProvider(command.getDeviceId(), command.getProvider())) {
             throw new RuntimeException("Already exists");
         }
@@ -69,9 +69,9 @@ public class PosDevice {
     }
 
     public PosDevice update(UpdatePosDeviceCommand command, PosDeviceRepositoryPort posDeviceRepositoryPort) {
-        PosDeviceStatusChangeLog posDeviceStatusChangeLog = new PosDeviceStatusChangeLog();
         online = command.getOnline();
         lastActivity = command.getLastActivity();
+        PosDeviceStatusChangeLog posDeviceStatusChangeLog = new PosDeviceStatusChangeLog();
         posDeviceStatusChangeLog.setOnline(online);
         recordStatusChangeLog(posDeviceStatusChangeLog);
         return posDeviceRepositoryPort.update(this);

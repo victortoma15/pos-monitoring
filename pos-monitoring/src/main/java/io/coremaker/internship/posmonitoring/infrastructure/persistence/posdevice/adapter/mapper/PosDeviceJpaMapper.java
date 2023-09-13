@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface PosDeviceJpaMapper {
 
-    PosDeviceJpa toJpa(PosDevice posDevice);
+   // PosDeviceJpa toJpa(PosDevice posDevice);
 
 
 }
