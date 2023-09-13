@@ -1,4 +1,4 @@
-package io.coremaker.internship.posmonitoring.controllers.dto;
+package io.coremaker.internship.posmonitoring.application.rest.posdevice.dto;
 
 import lombok.Data;
 
@@ -7,7 +7,9 @@ import javax.validation.constraints.NotNull;
 import java.time.Instant;
 
 @Data
-public class CreatePosDeviceRequestDto {
+public class PosDeviceResponseDto {
+
+    private Long id;
     @NotBlank
     private String deviceId;
     @NotBlank
@@ -18,5 +20,7 @@ public class CreatePosDeviceRequestDto {
     private String provider;
     @NotNull
     private Instant lastActivity;
+    private Instant createdAt;
+    private Instant updatedAt;
 
 }

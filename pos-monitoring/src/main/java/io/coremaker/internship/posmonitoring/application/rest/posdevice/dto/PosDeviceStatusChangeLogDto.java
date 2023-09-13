@@ -1,4 +1,4 @@
-package io.coremaker.internship.posmonitoring.controllers.dto;
+package io.coremaker.internship.posmonitoring.application.rest.posdevice.dto;
 
 import lombok.Data;
 

@@ -1,12 +1,11 @@
-package io.coremaker.internship.posmonitoring.controllers;
+package io.coremaker.internship.posmonitoring.application.rest.posdevice;
 
-import io.coremaker.internship.posmonitoring.controllers.dto.ErrorResponseDto;
-import lombok.AllArgsConstructor;
+import io.coremaker.internship.posmonitoring.application.rest.posdevice.dto.ErrorResponseDto;
+import io.coremaker.internship.posmonitoring.domain.exception.PosDeviceAlreadyExistsException;
+import io.coremaker.internship.posmonitoring.domain.exception.PosDeviceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -28,9 +27,18 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 );
     }
 
-    @ExceptionHandler(DeviceNotFoundException.class)
-    public ResponseEntity<ErrorResponseDto> handleDeviceNotFoundException(DeviceNotFoundException e) {
+    @ExceptionHandler(PosDeviceNotFoundException.class)
+    public ResponseEntity<ErrorResponseDto> handleDeviceNotFoundException(PosDeviceNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ErrorResponseDto.builder()
+                        .error(e.getMessage())
+                        .build()
+                );
+    }
+
+    @ExceptionHandler(PosDeviceAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponseDto> handleDeviceAlreadyExistsException(PosDeviceAlreadyExistsException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(ErrorResponseDto.builder()
                         .error(e.getMessage())
                         .build()
