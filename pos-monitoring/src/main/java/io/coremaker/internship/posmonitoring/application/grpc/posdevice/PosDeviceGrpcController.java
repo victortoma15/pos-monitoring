@@ -10,6 +10,7 @@ import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
 
 import java.time.Instant;
+
 @GrpcService
 public class PosDeviceGrpcController extends PosDeviceServiceGrpc.PosDeviceServiceImplBase {
     private final PosDeviceServicePort posDeviceServicePort;
@@ -17,6 +18,7 @@ public class PosDeviceGrpcController extends PosDeviceServiceGrpc.PosDeviceServi
     public PosDeviceGrpcController(PosDeviceServicePort posDeviceServicePort) {
         this.posDeviceServicePort = posDeviceServicePort;
     }
+
     @Override
     public void addPosDevice(CreatePosDeviceRequest.CreatePosDeviceRequestGrpc request, StreamObserver<CreatePosDeviceResponse.CreatePosDeviceResponseGrpc> responseObserver) {
         CreatePosDeviceCommand command = new CreatePosDeviceCommand();

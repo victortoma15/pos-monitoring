@@ -9,6 +9,10 @@ apply plugin: 'java'
 
 ext {
     flywayVersion = '9.21.1'
+    grpcVersion = '1.43.0'
+    protobufVersion = '3.24.0'
+    protocVersion = '3.24.0'
+    grpcServerVersion = '2.14.0.RELEASE'
 }
 
 group = 'io.coremaker.internship'
@@ -18,9 +22,6 @@ java {
     sourceCompatibility = '17'
 }
 
-def grpcVersion = '1.43.0' // Use a valid gRPC version
-def protobufVersion = '3.24.0'
-def protocVersion = protobufVersion
 
 configurations {
     compileOnly {
@@ -44,11 +45,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation "net.devh:grpc-server-spring-boot-starter:2.14.0.RELEASE"
+    implementation "net.devh:grpc-server-spring-boot-starter:${grpcServerVersion}"
 
     implementation "io.grpc:grpc-protobuf:${grpcVersion}"
     implementation "io.grpc:grpc-services:${grpcVersion}"
-    //grpc starter
 
     implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
 
@@ -82,22 +82,17 @@ sourceSets {
 }
 protobuf {
     protoc {
-        // Path to the protoc executable (the Protocol Buffers compiler)
         artifact = "com.google.protobuf:protoc:${protocVersion}"
     }
     plugins {
         grpc {
-            // Path to the protoc-gen-grpc-java plugin
             artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
         }
     }
     generateProtoTasks {
-        // Configure the tasks for generating Java classes from .proto files
         all()*.plugins {
-            grpc {} // Use the gRPC plugin for .proto files
+            grpc {}
         }
-        // Specify where the generated Java classes should be placed
-        // This path is relative to the source set's output directory
     }
 }
 

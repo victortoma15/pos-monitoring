@@ -1,7 +1,6 @@
 package io.coremaker.internship.posmonitoring.application.rest.posdevice;
 
 import io.coremaker.internship.posmonitoring.application.rest.posdevice.dto.ErrorResponseDto;
-import io.coremaker.internship.posmonitoring.domain.exception.PosDeviceAlreadyExistsException;
 import io.coremaker.internship.posmonitoring.domain.exception.PosDeviceNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;

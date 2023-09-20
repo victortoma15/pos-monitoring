@@ -20,10 +20,9 @@ public class PosDeviceServicePortAdapter implements PosDeviceServicePort {
 
     @Override
     public PosDevice create(CreatePosDeviceCommand command) {
-        try{
+        try {
             return PosDevice.create(command, posDeviceRepositoryPort);
-        }
-        catch (RuntimeException e){
+        } catch (RuntimeException e) {
             throw new PosDeviceAlreadyExistsException(command.getDeviceId());
         }
 
