@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package io.coremaker.internship.posmonitoring;
+
+import "google/protobuf/timestamp.proto";
+import "io.coremaker.internship.posmonitoring/create_pos_device_request.proto";
+import "io.coremaker.internship.posmonitoring/create_pos_device_response.proto";
+
+
+service PosDeviceService {
+  rpc AddPosDevice(CreatePosDeviceRequestGrpc) returns (CreatePosDeviceResponseGrpc);
+}
