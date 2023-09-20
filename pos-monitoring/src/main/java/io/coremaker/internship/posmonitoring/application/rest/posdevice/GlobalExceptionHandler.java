@@ -36,15 +36,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 );
     }
 
-    @ExceptionHandler(PosDeviceAlreadyExistsException.class)
-    public ResponseEntity<ErrorResponseDto> handleDeviceAlreadyExistsException(PosDeviceAlreadyExistsException e) {
-        return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(ErrorResponseDto.builder()
-                        .error(e.getMessage())
-                        .build()
-                );
-    }
-
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
         log.error("Something went wrong!", ex);

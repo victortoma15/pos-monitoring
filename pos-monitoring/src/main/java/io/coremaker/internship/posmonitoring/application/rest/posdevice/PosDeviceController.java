@@ -1,11 +1,9 @@
 package io.coremaker.internship.posmonitoring.application.rest.posdevice;
 
-import io.coremaker.internship.posmonitoring.application.rest.posdevice.dto.CreatePosDeviceRequestDto;
 import io.coremaker.internship.posmonitoring.application.rest.posdevice.dto.PosDeviceResponseDto;
 import io.coremaker.internship.posmonitoring.application.rest.posdevice.dto.UpdatePosDeviceRequestDto;
 import io.coremaker.internship.posmonitoring.domain.exception.PosDeviceNotFoundException;
 import io.coremaker.internship.posmonitoring.domain.model.PosDevice;
-import io.coremaker.internship.posmonitoring.domain.model.command.CreatePosDeviceCommand;
 import io.coremaker.internship.posmonitoring.domain.model.command.UpdatePosDeviceCommand;
 import io.coremaker.internship.posmonitoring.domain.port.PosDeviceServicePort;
 import lombok.RequiredArgsConstructor;
@@ -23,30 +21,6 @@ import javax.validation.Valid;
 public class PosDeviceController {
 
     private final PosDeviceServicePort posDeviceServicePort;
-
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    PosDeviceResponseDto createPosDevice(@RequestBody @Valid CreatePosDeviceRequestDto body) {
-        CreatePosDeviceCommand command = new CreatePosDeviceCommand();
-        command.setDeviceId(body.getDeviceId());
-        command.setLocation(body.getLocation());
-        command.setProvider(body.getProvider());
-        command.setOnline(body.getOnline());
-        command.setLastActivity(body.getLastActivity());
-
-        PosDeviceResponseDto posDeviceResponseDto = new PosDeviceResponseDto();
-        PosDevice posDevice = posDeviceServicePort.create(command);
-
-        posDeviceResponseDto.setId(posDevice.getId());
-        posDeviceResponseDto.setDeviceId(posDevice.getDeviceId());
-        posDeviceResponseDto.setLocation(posDevice.getLocation());
-        posDeviceResponseDto.setProvider(posDevice.getProvider());
-        posDeviceResponseDto.setOnline(posDevice.getOnline());
-        posDeviceResponseDto.setLastActivity(posDevice.getLastActivity());
-        posDeviceResponseDto.setCreatedAt(posDevice.getCreatedAt());
-        posDeviceResponseDto.setUpdatedAt(posDevice.getUpdatedAt());
-
-        return posDeviceResponseDto;
-    }
 
     @DeleteMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Void> deletePosDevice(@PathVariable Long id) {

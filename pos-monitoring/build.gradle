@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.15-SNAPSHOT'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'com.google.protobuf' version '0.9.4'
 }
 
 apply plugin: 'java'
@@ -16,6 +17,10 @@ version = '0.0.1-SNAPSHOT'
 java {
     sourceCompatibility = '17'
 }
+
+def grpcVersion = '1.43.0' // Use a valid gRPC version
+def protobufVersion = '3.24.0'
+def protocVersion = protobufVersion
 
 configurations {
     compileOnly {
@@ -39,6 +44,17 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation "net.devh:grpc-server-spring-boot-starter:2.14.0.RELEASE"
+
+    implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+    implementation "io.grpc:grpc-services:${grpcVersion}"
+    //grpc starter
+
+    implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
+
+    runtimeOnly "io.grpc:grpc-netty-shaded:${grpcVersion}"
+
+    testImplementation "io.grpc:grpc-testing:${grpcVersion}"
 
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
@@ -56,3 +72,33 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+sourceSets {
+    main {
+        java {
+            srcDirs 'build/generated/source/proto/main/grpc'
+            srcDirs 'build/generated/source/proto/main/java'
+        }
+    }
+}
+protobuf {
+    protoc {
+        // Path to the protoc executable (the Protocol Buffers compiler)
+        artifact = "com.google.protobuf:protoc:${protocVersion}"
+    }
+    plugins {
+        grpc {
+            // Path to the protoc-gen-grpc-java plugin
+            artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}"
+        }
+    }
+    generateProtoTasks {
+        // Configure the tasks for generating Java classes from .proto files
+        all()*.plugins {
+            grpc {} // Use the gRPC plugin for .proto files
+        }
+        // Specify where the generated Java classes should be placed
+        // This path is relative to the source set's output directory
+    }
+}
+
+
