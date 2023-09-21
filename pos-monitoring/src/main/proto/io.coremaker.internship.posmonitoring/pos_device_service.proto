@@ -2,7 +2,6 @@ syntax = "proto3";
 
 package io.coremaker.internship.posmonitoring;
 
-import "google/protobuf/timestamp.proto";
 import "io.coremaker.internship.posmonitoring/create_pos_device_request.proto";
 import "io.coremaker.internship.posmonitoring/create_pos_device_response.proto";
 import "io.coremaker.internship.posmonitoring/get_pos_device_details_request.proto";

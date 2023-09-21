@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package io.coremaker.internship.posmonitoring;
 
-import "google/protobuf/timestamp.proto";
-
 message GetDeviceDetailsRequestGrpc {
   sfixed64 id = 1;
 }

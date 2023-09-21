@@ -2,8 +2,6 @@ syntax = "proto3";
 
 package io.coremaker.internship.posmonitoring;
 
-import "google/protobuf/timestamp.proto";
-
 message CreatePosDeviceResponseGrpc {
   sfixed64 Id = 1;
   string deviceId = 2;

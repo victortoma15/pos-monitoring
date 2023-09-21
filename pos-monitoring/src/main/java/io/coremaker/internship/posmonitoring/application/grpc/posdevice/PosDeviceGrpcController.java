@@ -45,25 +45,22 @@ public class PosDeviceGrpcController extends PosDeviceServiceGrpc.PosDeviceServi
 
     @Override
     public void getPosDevice(GetPosDeviceDetailsRequest.GetDeviceDetailsRequestGrpc request, StreamObserver<GetPosDeviceDetailsResponse.GetDeviceDetailsResponseGrpc> responseObserver) {
-        long id = request.getId();
 
-        PosDevice posDevice = posDeviceServicePort.getById(id);
+        PosDevice posDevice = posDeviceServicePort.getById(request.getId());
 
-        if (posDevice != null) {
-            GetPosDeviceDetailsResponse.GetDeviceDetailsResponseGrpc responseGrpc = GetPosDeviceDetailsResponse.GetDeviceDetailsResponseGrpc.newBuilder()
-                    .setId(posDevice.getId())
-                    .setDeviceId(posDevice.getDeviceId())
-                    .setLocation(posDevice.getLocation())
-                    .setProvider(posDevice.getProvider())
-                    .setOnline(posDevice.getOnline())
-                    .setLastActivity(posDevice.getLastActivity().toString())
-                    .setCreatedAt(posDevice.getCreatedAt().toString())
-                    .setUpdatedAt(posDevice.getUpdatedAt().toString())
-                    .build();
+        GetPosDeviceDetailsResponse.GetDeviceDetailsResponseGrpc responseGrpc = GetPosDeviceDetailsResponse.GetDeviceDetailsResponseGrpc.newBuilder()
+                .setId(posDevice.getId())
+                .setDeviceId(posDevice.getDeviceId())
+                .setLocation(posDevice.getLocation())
+                .setProvider(posDevice.getProvider())
+                .setOnline(posDevice.getOnline())
+                .setLastActivity(posDevice.getLastActivity().toString())
+                .setCreatedAt(posDevice.getCreatedAt().toString())
+                .setUpdatedAt(posDevice.getUpdatedAt().toString())
+                .build();
 
-            responseObserver.onNext(responseGrpc);
-            responseObserver.onCompleted();
-        }
+        responseObserver.onNext(responseGrpc);
+        responseObserver.onCompleted();
     }
 
 
