@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package io.coremaker.internship.posmonitoring;
+
+message GetDeviceDetailsRequestGrpc {
+  sfixed64 id = 1;
+}
