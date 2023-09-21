@@ -1,6 +1,7 @@
 package io.coremaker.internship.posmonitoring.application.rest.posdevice;
 
 import io.coremaker.internship.posmonitoring.application.rest.posdevice.dto.PosDeviceResponseDto;
+import io.coremaker.internship.posmonitoring.application.rest.posdevice.dto.PosDeviceStatusChangeLogDto;
 import io.coremaker.internship.posmonitoring.application.rest.posdevice.dto.UpdatePosDeviceRequestDto;
 import io.coremaker.internship.posmonitoring.domain.exception.PosDeviceNotFoundException;
 import io.coremaker.internship.posmonitoring.domain.model.PosDevice;
@@ -13,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Validated
 @RestController
@@ -28,25 +30,6 @@ public class PosDeviceController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PosDeviceResponseDto> getPosDevice(@PathVariable Long id) {
-        PosDevice posDevice = posDeviceServicePort.getById(id);
-        if (posDevice != null) {
-            PosDeviceResponseDto responseDto = new PosDeviceResponseDto();
-            responseDto.setId(posDevice.getId());
-            responseDto.setDeviceId(posDevice.getDeviceId());
-            responseDto.setLocation(posDevice.getLocation());
-            responseDto.setProvider(posDevice.getProvider());
-            responseDto.setOnline(posDevice.getOnline());
-            responseDto.setLastActivity(posDevice.getLastActivity());
-            responseDto.setCreatedAt(posDevice.getCreatedAt());
-            responseDto.setUpdatedAt(posDevice.getUpdatedAt());
-
-            return ResponseEntity.ok(responseDto);
-        } else {
-            throw new PosDeviceNotFoundException(id);
-        }
-    }
 
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     PosDeviceResponseDto updatePosDevice(@PathVariable Long id, @RequestBody @Valid UpdatePosDeviceRequestDto body) {
@@ -66,7 +49,7 @@ public class PosDeviceController {
         posDeviceResponseDto.setUpdatedAt(updatedPosDevice.getUpdatedAt());
         return posDeviceResponseDto;
     }
-//
+
 //    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 //    List<PosDeviceResponseDto> getDevices(@RequestParam(required = false) Boolean online, @RequestParam(required = false) String provider,
 //                                          @RequestParam(required = false, defaultValue = "0") int pageNo,

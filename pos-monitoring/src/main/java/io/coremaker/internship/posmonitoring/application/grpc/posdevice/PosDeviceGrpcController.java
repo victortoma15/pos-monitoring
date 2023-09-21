@@ -1,8 +1,6 @@
 package io.coremaker.internship.posmonitoring.application.grpc.posdevice;
 
-import io.coremaker.internship.posmonitoring.CreatePosDeviceRequest;
-import io.coremaker.internship.posmonitoring.CreatePosDeviceResponse;
-import io.coremaker.internship.posmonitoring.PosDeviceServiceGrpc;
+import io.coremaker.internship.posmonitoring.*;
 import io.coremaker.internship.posmonitoring.domain.model.PosDevice;
 import io.coremaker.internship.posmonitoring.domain.model.command.CreatePosDeviceCommand;
 import io.coremaker.internship.posmonitoring.domain.port.PosDeviceServicePort;
@@ -44,4 +42,29 @@ public class PosDeviceGrpcController extends PosDeviceServiceGrpc.PosDeviceServi
         responseObserver.onNext(response);
         responseObserver.onCompleted();
     }
+
+    @Override
+    public void getPosDevice(GetPosDeviceDetailsRequest.GetDeviceDetailsRequestGrpc request, StreamObserver<GetPosDeviceDetailsResponse.GetDeviceDetailsResponseGrpc> responseObserver) {
+        long id = request.getId();
+
+        PosDevice posDevice = posDeviceServicePort.getById(id);
+
+        if (posDevice != null) {
+            GetPosDeviceDetailsResponse.GetDeviceDetailsResponseGrpc responseGrpc = GetPosDeviceDetailsResponse.GetDeviceDetailsResponseGrpc.newBuilder()
+                    .setId(posDevice.getId())
+                    .setDeviceId(posDevice.getDeviceId())
+                    .setLocation(posDevice.getLocation())
+                    .setProvider(posDevice.getProvider())
+                    .setOnline(posDevice.getOnline())
+                    .setLastActivity(posDevice.getLastActivity().toString())
+                    .setCreatedAt(posDevice.getCreatedAt().toString())
+                    .setUpdatedAt(posDevice.getUpdatedAt().toString())
+                    .build();
+
+            responseObserver.onNext(responseGrpc);
+            responseObserver.onCompleted();
+        }
+    }
+
+
 }
