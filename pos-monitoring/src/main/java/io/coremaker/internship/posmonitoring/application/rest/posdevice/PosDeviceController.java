@@ -31,25 +31,6 @@ public class PosDeviceController {
     }
 
 
-    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    PosDeviceResponseDto updatePosDevice(@PathVariable Long id, @RequestBody @Valid UpdatePosDeviceRequestDto body) {
-        UpdatePosDeviceCommand command = new UpdatePosDeviceCommand();
-        command.setId(id);
-        command.setOnline(body.getOnline());
-        command.setLastActivity(body.getLastActivity());
-        PosDevice updatedPosDevice = posDeviceServicePort.update(command);
-        PosDeviceResponseDto posDeviceResponseDto = new PosDeviceResponseDto();
-        posDeviceResponseDto.setId(updatedPosDevice.getId());
-        posDeviceResponseDto.setDeviceId(updatedPosDevice.getDeviceId());
-        posDeviceResponseDto.setLocation(updatedPosDevice.getLocation());
-        posDeviceResponseDto.setProvider(updatedPosDevice.getProvider());
-        posDeviceResponseDto.setOnline(updatedPosDevice.getOnline());
-        posDeviceResponseDto.setLastActivity(updatedPosDevice.getLastActivity());
-        posDeviceResponseDto.setCreatedAt(updatedPosDevice.getCreatedAt());
-        posDeviceResponseDto.setUpdatedAt(updatedPosDevice.getUpdatedAt());
-        return posDeviceResponseDto;
-    }
-
 //    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 //    List<PosDeviceResponseDto> getDevices(@RequestParam(required = false) Boolean online, @RequestParam(required = false) String provider,
 //                                          @RequestParam(required = false, defaultValue = "0") int pageNo,
