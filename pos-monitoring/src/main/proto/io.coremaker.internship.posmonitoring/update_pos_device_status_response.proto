@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package io.coremaker.internship.posmonitoring;
+
+message UpdatePosDeviceResponseGrpc {
+  int64 id = 1;
+  string deviceId = 2;
+  string location = 3;
+  string provider = 4;
+  bool online = 5;
+  string lastActivity = 6;
+  string createdAt = 7;
+  string updatedAt = 8;
+}
