@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package io.coremaker.internship.posmonitoring;
+
+message UpdatePosDeviceRequestGrpc {
+  int64 id = 1;
+  bool online = 5;
+  string lastActivity = 6;
+}
